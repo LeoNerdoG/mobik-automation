@@ -1,0 +1,48 @@
+name: DemoWebshop Tests
+
+on:
+  push:
+    branches:
+      - main # Or your main branch name
+  pull_request:
+    branches:
+      - main # Or your main branch name
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # Or your preferred Node.js version
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Install Chrome
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Install ChromeDriver
+        run: |
+            npm install chromedriver_installer
+            npx chromedriver-installer --chrome-version=stable
+
+      - name: Run Selenium tests
+        run: npm run test
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: failure() # Only upload if tests fail
+        with:
+          name: test-results
+          path: dist/
