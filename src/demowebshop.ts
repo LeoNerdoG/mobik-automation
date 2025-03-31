@@ -6,111 +6,221 @@ import { RegistrationPage } from './pages/registrationPage';
 import { LoginPage } from './pages/loginPage';
 import { MyAccountPage } from './pages/myAccountPage';
 import { HomePageElements } from './elements/homePageElements';
+import { describe, it, before, after } from "mocha";
+
+
+describe("Demo webshop Registration Tests", function () {
+  let driver!: WebDriver;
+
+  before(async function () {
+    const options = new Options();
+    options.addArguments('--headless');
+    const driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
+  });
+
+    // Cleanup: Close browser after tests
+    after(async function () {
+      await driver.quit();
+    });
+
+    it("Positive registration test", async function () {
+      const homePage = new HomePage(driver);
+      const loginPage = new LoginPage(driver);
+      const myAccountPage = new MyAccountPage(driver);
+      const registrationPage = new RegistrationPage(driver);
+      const randomNumber = getRandomInt(1, 10000);
+      const email = `testUser-${randomNumber}@example.com`;
+    
+      await homePage.navigateTo(driver);
+      await homePage.clickRegisterLink();
+    
+      await registrationPage.enterFirstName('Test');
+      await registrationPage.enterLastName('User');
+      await registrationPage.enterEmail(email);
+      await registrationPage.enterPassword('password123');
+      await registrationPage.enterConfirmPassword('password123');
+      await registrationPage.clickRegisterButton();
+    
+      const successMessage = await  registrationPage.getRegistrationResult();
+      assert.ok(await successMessage.includes("Your registration completed"));
+    
+      await homePage.clickLogoutLink();
+      await homePage.clickLoginLink();
+    
+      await loginPage.login(email, 'password');
+      
+      await homePage.clickMyAccountLink();
+      myAccountPage.assertLoginSuccess(email);
+
+      console.log("✅ Positive registration test Passed!");
+    });
+
+    it("Negative registration test", async function () {
+        const homePage = new HomePage(driver);
+        const registrationPage = new RegistrationPage(driver);
+        const randomNumber = getRandomInt(1, 10000);
+        const email = `testUser-${randomNumber}@example.com`;
+      
+        await homePage.navigateTo(driver);
+        await homePage.clickRegisterLink();
+        // just click Register button and that's it
+        await registrationPage.clickRegisterButton();
+      
+        await registrationPage.assertErrorMessages();
+        console.log("✅ Negative registration test Passed!");
+    });
+
+    it("Negative registration test - bad email", async function () {
+      const homePage = new HomePage(driver);
+      const registrationPage = new RegistrationPage(driver);
+      await homePage.navigateTo(driver);
+      await homePage.clickRegisterLink();
+      
+      await driver.wait(until.elementLocated(HomePageElements.registerButton), 10000);
+      await homePage.clickRegisterLink();
+    
+      await registrationPage.enterFirstName('Test');
+      await registrationPage.enterLastName('User');
+      await registrationPage.enterEmail("123");
+      await registrationPage.enterPassword('password123');
+      await registrationPage.enterConfirmPassword('password123');
+      await registrationPage.clickRegisterButton();
+    
+      await registrationPage.assertWrongEmailMessage();
+      console.log("✅ Negative registration test - bad email Passed!");
+    });
+
+    it("Negative registration test - bad password", async function () {
+      const homePage = new HomePage(driver);
+      const registrationPage = new RegistrationPage(driver);
+      const randomNumber = getRandomInt(1, 10000);
+      const email = `testUser-${randomNumber}@example.com`;
+    
+      await homePage.navigateTo(driver);
+      await homePage.clickRegisterLink();
+    
+      await registrationPage.enterFirstName('Test');
+      await registrationPage.enterLastName('User');
+      await registrationPage.enterEmail(email);
+      await registrationPage.enterPassword('1');
+      await registrationPage.enterConfirmPassword('2');
+      await registrationPage.clickRegisterButton();
+    
+      await registrationPage.assertWrongPasswordMessage();
+      console.log("✅ Negative registration test - bad password Passed!");
+    })
+
+
+
+});
+
+
+
+
 
 // positive registration test
-async function positiveRegistrationTest(driver: WebDriver) {
-  const homePage = new HomePage(driver);
-  const loginPage = new LoginPage(driver);
-  const myAccountPage = new MyAccountPage(driver);
-  const registrationPage = new RegistrationPage(driver);
-  const randomNumber = getRandomInt(1, 10000);
-  const email = `testUser-${randomNumber}@example.com`;
+// async function positiveRegistrationTest(driver: WebDriver) {
+//   const homePage = new HomePage(driver);
+//   const loginPage = new LoginPage(driver);
+//   const myAccountPage = new MyAccountPage(driver);
+//   const registrationPage = new RegistrationPage(driver);
+//   const randomNumber = getRandomInt(1, 10000);
+//   const email = `testUser-${randomNumber}@example.com`;
 
-  await homePage.navigateTo();
-  await homePage.clickRegisterLink();
+//   await homePage.navigateTo();
+//   await homePage.clickRegisterLink();
 
-  await registrationPage.enterFirstName('Test');
-  await registrationPage.enterLastName('User');
-  await registrationPage.enterEmail(email);
-  await registrationPage.enterPassword('password123');
-  await registrationPage.enterConfirmPassword('password123');
-  await registrationPage.clickRegisterButton();
+//   await registrationPage.enterFirstName('Test');
+//   await registrationPage.enterLastName('User');
+//   await registrationPage.enterEmail(email);
+//   await registrationPage.enterPassword('password123');
+//   await registrationPage.enterConfirmPassword('password123');
+//   await registrationPage.clickRegisterButton();
 
-  const successMessage = await  registrationPage.getRegistrationResult();
-  assert.ok(await successMessage.includes("Your registration completed"));
+//   const successMessage = await  registrationPage.getRegistrationResult();
+//   assert.ok(await successMessage.includes("Your registration completed"));
 
-  await homePage.clickLogoutLink();
-  await homePage.clickLoginLink();
+//   await homePage.clickLogoutLink();
+//   await homePage.clickLoginLink();
 
-  await loginPage.login(email, 'password');
+//   await loginPage.login(email, 'password');
   
-  await homePage.clickMyAccountLink();
-  myAccountPage.assertLoginSuccess(email);
-}
+//   await homePage.clickMyAccountLink();
+//   myAccountPage.assertLoginSuccess(email);
+// }
 
 // Negative registration test
-async function negativeRegistrationTest(driver: WebDriver) {
-  const homePage = new HomePage(driver);
-  const registrationPage = new RegistrationPage(driver);
-  const randomNumber = getRandomInt(1, 10000);
-  const email = `testUser-${randomNumber}@example.com`;
+// async function negativeRegistrationTest(driver: WebDriver) {
+//   const homePage = new HomePage(driver);
+//   const registrationPage = new RegistrationPage(driver);
+//   const randomNumber = getRandomInt(1, 10000);
+//   const email = `testUser-${randomNumber}@example.com`;
 
-  await homePage.navigateTo();
-  await homePage.clickRegisterLink();
-  // just click Register button and that's it
-  await registrationPage.clickRegisterButton();
+//   await homePage.navigateTo();
+//   await homePage.clickRegisterLink();
+//   // just click Register button and that's it
+//   await registrationPage.clickRegisterButton();
 
-  await registrationPage.assertErrorMessages();
-}
+//   await registrationPage.assertErrorMessages();
+// }
 
 // Negative registration test - Bad email
-async function negativeRegistrationWrongEmailTest(driver: WebDriver) {
-  const homePage = new HomePage(driver);
-  const registrationPage = new RegistrationPage(driver);
+// async function negativeRegistrationWrongEmailTest(driver: WebDriver) {
+//   const homePage = new HomePage(driver);
+//   const registrationPage = new RegistrationPage(driver);
 
-  await driver.wait(until.elementLocated(HomePageElements.registerButton), 10000);
-  await homePage.clickRegisterLink();
+//   await driver.wait(until.elementLocated(HomePageElements.registerButton), 10000);
+//   await homePage.clickRegisterLink();
 
-  await registrationPage.enterFirstName('Test');
-  await registrationPage.enterLastName('User');
-  await registrationPage.enterEmail("123");
-  await registrationPage.enterPassword('password123');
-  await registrationPage.enterConfirmPassword('password123');
-  await registrationPage.clickRegisterButton();
+//   await registrationPage.enterFirstName('Test');
+//   await registrationPage.enterLastName('User');
+//   await registrationPage.enterEmail("123");
+//   await registrationPage.enterPassword('password123');
+//   await registrationPage.enterConfirmPassword('password123');
+//   await registrationPage.clickRegisterButton();
 
-  await registrationPage.assertWrongEmailMessage();
-}
+//   await registrationPage.assertWrongEmailMessage();
+// }
 
 // Negative registration test - Bad password
-async function negativeRegistrationPasswordErrorTest(driver: WebDriver) {
-  const homePage = new HomePage(driver);
-  const registrationPage = new RegistrationPage(driver);
-  const randomNumber = getRandomInt(1, 10000);
-  const email = `testUser-${randomNumber}@example.com`;
+// async function negativeRegistrationPasswordErrorTest(driver: WebDriver) {
+//   const homePage = new HomePage(driver);
+//   const registrationPage = new RegistrationPage(driver);
+//   const randomNumber = getRandomInt(1, 10000);
+//   const email = `testUser-${randomNumber}@example.com`;
 
-  await homePage.navigateTo();
-  await homePage.clickRegisterLink();
+//   await homePage.navigateTo();
+//   await homePage.clickRegisterLink();
 
-  await registrationPage.enterFirstName('Test');
-  await registrationPage.enterLastName('User');
-  await registrationPage.enterEmail(email);
-  await registrationPage.enterPassword('1');
-  await registrationPage.enterConfirmPassword('2');
-  await registrationPage.clickRegisterButton();
+//   await registrationPage.enterFirstName('Test');
+//   await registrationPage.enterLastName('User');
+//   await registrationPage.enterEmail(email);
+//   await registrationPage.enterPassword('1');
+//   await registrationPage.enterConfirmPassword('2');
+//   await registrationPage.clickRegisterButton();
 
-  await registrationPage.assertWrongPasswordMessage();
-}
+//   await registrationPage.assertWrongPasswordMessage();
+// }
 
-async function main() {
-  process.env.SELENIUM_LOGS = 'selenium.log';
-  const options = new Options();
-  options.addArguments('--headless');
-  const driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
+// async function main() {
+//   // const options = new Options();
+//   // options.addArguments('--headless');
+//   // const driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
 
-  try {;
+//   try {;
 
-    await positiveRegistrationTest(driver);
-    await negativeRegistrationTest(driver);
-    await negativeRegistrationWrongEmailTest(driver);
-    await negativeRegistrationPasswordErrorTest(driver);
-    await driver.sleep(50000);
-    console.log('All tests passed!');
-  } catch (error) {
-    console.error('Test failed:', error);
-  } finally {
-    await driver.quit();
-  }
-}   
+//     await positiveRegistrationTest(driver);
+//     await negativeRegistrationTest(driver);
+//     await negativeRegistrationWrongEmailTest(driver);
+//     await negativeRegistrationPasswordErrorTest(driver);
+//     await driver.sleep(50000);
+//     console.log('All tests passed!');
+//   } catch (error) {
+//     console.error('Test failed:', error);
+//   } finally {
+//     await driver.quit();
+//   }
+// }   
 
 // helper function for getting random number
 function getRandomInt(min: number, max: number) {
@@ -119,4 +229,4 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
 }
     
-main();
+// main();

@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "test": "node dist/demowebshop.js"
+    "test": "mocha --reporter mochawesome dist/demowebshop.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,7 @@
     "selenium-webdriver": "^4.30.0"
   },
   "devDependencies": {
+    "@types/mocha": "^10.0.10",
     "@types/node": "^22.13.14",
     "@types/selenium-webdriver": "^4.1.28",
     "mochawesome": "^7.1.3"

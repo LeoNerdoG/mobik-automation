@@ -1,0 +1,215 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 4,
+    "passes": 0,
+    "pending": 0,
+    "failures": 4,
+    "start": "2025-03-31T22:39:02.096Z",
+    "end": "2025-03-31T22:39:03.896Z",
+    "duration": 1800,
+    "testsRegistered": 4,
+    "passPercent": 0,
+    "pendingPercent": 0,
+    "other": 1,
+    "hasOther": true,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "69bc9c9d-5044-44e3-a095-51981705e6f0",
+      "title": "",
+      "fullFile": "/Users/leonardoga/Github/mobik-automation/dist/demowebshop.js",
+      "file": "/dist/demowebshop.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "f3f82b0a-2d1d-4d6f-bc02-9d27759f99ae",
+          "title": "Demo webshop Registration Tests",
+          "fullFile": "/Users/leonardoga/Github/mobik-automation/dist/demowebshop.js",
+          "file": "/dist/demowebshop.js",
+          "beforeHooks": [
+            {
+              "title": "\"before all\" hook in \"Demo webshop Registration Tests\"",
+              "fullTitle": "Demo webshop Registration Tests \"before all\" hook in \"Demo webshop Registration Tests\"",
+              "timedOut": false,
+              "duration": 1795,
+              "state": null,
+              "speed": null,
+              "pass": false,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "const options = new chrome_1.Options();\noptions.addArguments('--headless');\nconst driver = await new selenium_webdriver_1.Builder().forBrowser('chrome').setChromeOptions(options).build();",
+              "err": {},
+              "uuid": "26974f85-e189-4855-8c9a-31a59474e93d",
+              "parentUUID": "f3f82b0a-2d1d-4d6f-bc02-9d27759f99ae",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "afterHooks": [
+            {
+              "title": "\"after all\" hook for \"Negative registration test - bad password\"",
+              "fullTitle": "Demo webshop Registration Tests \"after all\" hook for \"Negative registration test - bad password\"",
+              "timedOut": false,
+              "duration": 0,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "await driver.quit();",
+              "err": {
+                "message": "TypeError: Cannot read properties of undefined (reading 'quit')",
+                "estack": "TypeError: Cannot read properties of undefined (reading 'quit')\n    at Context.<anonymous> (dist/demowebshop.js:21:22)\n    at process.processImmediate (node:internal/timers:491:21)",
+                "diff": null
+              },
+              "uuid": "2e4f8dd0-76f2-4d0c-b9c3-d16b012e3af0",
+              "parentUUID": "f3f82b0a-2d1d-4d6f-bc02-9d27759f99ae",
+              "isHook": true,
+              "skipped": false
+            }
+          ],
+          "tests": [
+            {
+              "title": "Positive registration test",
+              "fullTitle": "Demo webshop Registration Tests Positive registration test",
+              "timedOut": false,
+              "duration": 1,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "const homePage = new homePage_1.HomePage(driver);\nconst loginPage = new loginPage_1.LoginPage(driver);\nconst myAccountPage = new myAccountPage_1.MyAccountPage(driver);\nconst registrationPage = new registrationPage_1.RegistrationPage(driver);\nconst randomNumber = getRandomInt(1, 10000);\nconst email = `testUser-${randomNumber}@example.com`;\nawait homePage.navigateTo();\nawait homePage.clickRegisterLink();\nawait registrationPage.enterFirstName('Test');\nawait registrationPage.enterLastName('User');\nawait registrationPage.enterEmail(email);\nawait registrationPage.enterPassword('password123');\nawait registrationPage.enterConfirmPassword('password123');\nawait registrationPage.clickRegisterButton();\nconst successMessage = await registrationPage.getRegistrationResult();\nassert_1.strict.ok(await successMessage.includes(\"Your registration completed\"));\nawait homePage.clickLogoutLink();\nawait homePage.clickLoginLink();\nawait loginPage.login(email, 'password');\nawait homePage.clickMyAccountLink();\nmyAccountPage.assertLoginSuccess(email);\nconsole.log(\"✅ Positive registration test Passed!\");",
+              "err": {
+                "message": "TypeError: Cannot read properties of undefined (reading 'get')",
+                "estack": "TypeError: Cannot read properties of undefined (reading 'get')\n    at HomePage.navigateTo (dist/pages/homePage.js:11:27)\n    at Context.<anonymous> (dist/demowebshop.js:30:24)\n    at process.processImmediate (node:internal/timers:491:21)",
+                "diff": null
+              },
+              "uuid": "61b67204-d8d0-434b-b303-4438abf5b7be",
+              "parentUUID": "f3f82b0a-2d1d-4d6f-bc02-9d27759f99ae",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Negative registration test",
+              "fullTitle": "Demo webshop Registration Tests Negative registration test",
+              "timedOut": false,
+              "duration": 0,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "const homePage = new homePage_1.HomePage(driver);\nconst registrationPage = new registrationPage_1.RegistrationPage(driver);\nconst randomNumber = getRandomInt(1, 10000);\nconst email = `testUser-${randomNumber}@example.com`;\nawait homePage.navigateTo();\nawait homePage.clickRegisterLink();\n// just click Register button and that's it\nawait registrationPage.clickRegisterButton();\nawait registrationPage.assertErrorMessages();\nconsole.log(\"✅ Negative registration test Passed!\");",
+              "err": {
+                "message": "TypeError: Cannot read properties of undefined (reading 'get')",
+                "estack": "TypeError: Cannot read properties of undefined (reading 'get')\n    at HomePage.navigateTo (dist/pages/homePage.js:11:27)\n    at Context.<anonymous> (dist/demowebshop.js:52:24)\n    at process.processImmediate (node:internal/timers:491:21)",
+                "diff": null
+              },
+              "uuid": "021dc141-59e0-4538-b46b-d2d7469a63bb",
+              "parentUUID": "f3f82b0a-2d1d-4d6f-bc02-9d27759f99ae",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Negative registration test - bad email",
+              "fullTitle": "Demo webshop Registration Tests Negative registration test - bad email",
+              "timedOut": false,
+              "duration": 1,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "const homePage = new homePage_1.HomePage(driver);\nconst registrationPage = new registrationPage_1.RegistrationPage(driver);\nawait driver.wait(selenium_webdriver_1.until.elementLocated(homePageElements_1.HomePageElements.registerButton), 10000);\nawait homePage.clickRegisterLink();\nawait registrationPage.enterFirstName('Test');\nawait registrationPage.enterLastName('User');\nawait registrationPage.enterEmail(\"123\");\nawait registrationPage.enterPassword('password123');\nawait registrationPage.enterConfirmPassword('password123');\nawait registrationPage.clickRegisterButton();\nawait registrationPage.assertWrongEmailMessage();\nconsole.log(\"✅ Negative registration test - bad email Passed!\");",
+              "err": {
+                "message": "TypeError: Cannot read properties of undefined (reading 'wait')",
+                "estack": "TypeError: Cannot read properties of undefined (reading 'wait')\n    at Context.<anonymous> (dist/demowebshop.js:62:22)\n    at process.processImmediate (node:internal/timers:491:21)",
+                "diff": null
+              },
+              "uuid": "f0459031-6ff6-486f-a554-bc1c609777aa",
+              "parentUUID": "f3f82b0a-2d1d-4d6f-bc02-9d27759f99ae",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Negative registration test - bad password",
+              "fullTitle": "Demo webshop Registration Tests Negative registration test - bad password",
+              "timedOut": false,
+              "duration": 0,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "const homePage = new homePage_1.HomePage(driver);\nconst registrationPage = new registrationPage_1.RegistrationPage(driver);\nconst randomNumber = getRandomInt(1, 10000);\nconst email = `testUser-${randomNumber}@example.com`;\nawait homePage.navigateTo();\nawait homePage.clickRegisterLink();\nawait registrationPage.enterFirstName('Test');\nawait registrationPage.enterLastName('User');\nawait registrationPage.enterEmail(email);\nawait registrationPage.enterPassword('1');\nawait registrationPage.enterConfirmPassword('2');\nawait registrationPage.clickRegisterButton();\nawait registrationPage.assertWrongPasswordMessage();\nconsole.log(\"✅ Negative registration test - bad password Passed!\");",
+              "err": {
+                "message": "TypeError: Cannot read properties of undefined (reading 'get')",
+                "estack": "TypeError: Cannot read properties of undefined (reading 'get')\n    at HomePage.navigateTo (dist/pages/homePage.js:11:27)\n    at Context.<anonymous> (dist/demowebshop.js:78:24)\n    at process.processImmediate (node:internal/timers:491:21)",
+                "diff": null
+              },
+              "uuid": "de7f58a8-7a25-4457-97a4-766226dd21d0",
+              "parentUUID": "f3f82b0a-2d1d-4d6f-bc02-9d27759f99ae",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [],
+          "failures": [
+            "61b67204-d8d0-434b-b303-4438abf5b7be",
+            "021dc141-59e0-4538-b46b-d2d7469a63bb",
+            "f0459031-6ff6-486f-a554-bc1c609777aa",
+            "de7f58a8-7a25-4457-97a4-766226dd21d0"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 2,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "11.1.0"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": true,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": null,
+      "version": "6.2.0"
+    }
+  }
+}
