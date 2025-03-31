@@ -1,4 +1,4 @@
-import { By, WebDriver, WebElement } from 'selenium-webdriver';
+import { By, WebDriver, WebElement, until } from 'selenium-webdriver';
 import { HomePageElements } from '../elements/homePageElements';
 
 export class HomePage {
@@ -27,21 +27,8 @@ export class HomePage {
 
   async clickMyAccountLink(): Promise<void> {
     // await expect(this.driver.locator(HomePageLocators.myAccount)).toBeVisible();
-    await this.driver.findElement(HomePageElements.myAccount).click();
-  }
-  
-  async searchProduct(productName: string): Promise<void> {
-    const searchBox = await this.driver.findElement(By.id('small-searchterms'));
-    await searchBox.sendKeys(productName);
-    const searchButton = await this.driver.findElement(By.css('input[type="submit"]'));
-    await searchButton.click();
-  }
-
-  async getPageTitle(): Promise<string> {
-    return this.driver.getTitle();
-  }
-
-  async getWelcomeMessage(): Promise<string> {
-      return this.driver.findElement(By.css(".topic-html-content-header")).getText();
+    await this.driver.wait(until.elementLocated(HomePageElements.myAccount), 10000);
+    const myAccountLik = await this.driver.findElement(HomePageElements.myAccount);
+    await myAccountLik.click();
   }
 }

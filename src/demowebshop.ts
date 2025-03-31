@@ -19,7 +19,6 @@ async function positiveRegistrationTest(driver: WebDriver) {
   await homePage.navigateTo();
   await homePage.clickRegisterLink();
 
-  // await registrationPage.selectGender('M');
   await registrationPage.enterFirstName('Test');
   await registrationPage.enterLastName('User');
   await registrationPage.enterEmail(email);
@@ -54,6 +53,7 @@ async function negativeRegistrationTest(driver: WebDriver) {
   await registrationPage.assertErrorMessages();
 }
 
+// Negative registration test - Bad email
 async function negativeRegistrationWrongEmailTest(driver: WebDriver) {
   const homePage = new HomePage(driver);
   const registrationPage = new RegistrationPage(driver);
@@ -71,6 +71,7 @@ async function negativeRegistrationWrongEmailTest(driver: WebDriver) {
   await registrationPage.assertWrongEmailMessage();
 }
 
+// Negative registration test - Bad password
 async function negativeRegistrationPasswordErrorTest(driver: WebDriver) {
   const homePage = new HomePage(driver);
   const registrationPage = new RegistrationPage(driver);
@@ -94,12 +95,9 @@ async function main() {
   process.env.SELENIUM_LOGS = 'selenium.log';
   const options = new Options();
   options.addArguments('--headless');
-  // options.setPageLoadStrategy('normal');
   const driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
 
-  try {
-    // await driver.manage().setTimeouts({ implicit: 10000 });
-    // await driver.sleep(5000);
+  try {;
 
     await positiveRegistrationTest(driver);
     await negativeRegistrationTest(driver);
@@ -114,6 +112,7 @@ async function main() {
   }
 }   
 
+// helper function for getting random number
 function getRandomInt(min: number, max: number) {
   const minCeiled = Math.ceil(min);
   const maxFloored = Math.floor(max);
