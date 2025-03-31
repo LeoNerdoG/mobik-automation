@@ -30,17 +30,19 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
 
-      - name: Install ChromeDriver
+      - name: Install and Start WebDriver Manager
         run: |
-            npm install chromedriver_installer
-            npx chromedriver-installer --chrome-version=stable
+            npm install webdriver-manager
+            npx webdriver-manager update --gecko false
+            npx webdriver-manager start --gecko false &
+            sleep 5
 
       - name: Run Selenium tests
         run: npm run test
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
-        if: failure() # Only upload if tests fail
+        if: failure()
         with:
           name: test-results
           path: dist/
