@@ -50,7 +50,11 @@ async function negativeRegistrationTest(driver: WebDriver) {
   // just click Register button and that's it
   await registrationPage.clickRegisterButton();
 
-  await registrationPage.assertErrorMessages();
+  await registrationPage.asserMissingFirstName();
+  await registrationPage.asserMissingLastName();
+  await registrationPage.asserMissingEmail();
+  await registrationPage.asserMissingPassword(true);
+  await registrationPage.asserMissingPassword(false);
 }
 
 // Negative registration test - Bad email
@@ -97,8 +101,7 @@ async function main() {
   options.addArguments('--headless');
   const driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
 
-  try {;
-
+  try {
     await positiveRegistrationTest(driver);
     await negativeRegistrationTest(driver);
     await negativeRegistrationWrongEmailTest(driver);
